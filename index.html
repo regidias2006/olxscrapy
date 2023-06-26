@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Exibição de Itens</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <style>
+    .v-pagination {
+      display: inline-flex;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <v-app>
+      <v-main>
+        <v-container>
+          <v-row>
+            <v-col cols="12" class="d-flex justify-end">
+              <div>
+                <v-btn color="error" @click="deleteAllItems">Eliminar Todos os Itens</v-btn>
+              </div>
+            </v-col>
+          </v-row>
+          <h1>Itens Disponíveis</h1>
+          <v-row> 
+            <v-col v-for="(item, index) in paginatedItems" :key="item.id" cols="6" md="4" lg="3">
+              <v-card>
+                <v-img :src="item.image_url" height="256"></v-img>
+                <v-card-title>{{ item.title }}</v-card-title>
+                <v-card-text>Preço: {{ item.price }}</v-card-text>
+                <v-card-actions>
+                  <v-btn color="primary" :href="item.item_url" target="_blank">Detalhes</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-pagination v-model="currentPage" :length="Math.ceil(items.length / itemsPerPage)" @input="changePage"></v-pagination>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
+
+  <script>
+
+    new Vue({
+      el: '#app',
+      data: {
+        items: [], // Os itens serão preenchidos a partir do arquivo JSON
+        currentPage: 1,
+        itemsPerPage: 3
+      },
+      computed: {
+        paginatedItems() {
+          const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+          const endIndex = startIndex + this.itemsPerPage;
+          return this.items.slice(startIndex, endIndex);
+        }
+      },
+      mounted() {
+        // Carregando o arquivo JSON localmente
+        fetch('http://127.0.0.1:8000/output.json')
+          .then(response => response.json())
+          .then(data => {
+            this.items = data;
+          });
+      },
+      methods: {
+        changePage(page) {
+          this.currentPage = page;
+        },
+        deleteAllItems() {
+          // Limpar o array de items
+          this.items = [];
+
+          // Fazer uma solicitação HTTP para o backend para eliminar todos os itens do arquivo JSON
+          fetch('http://127.0.0.1:8000/delete_all_items', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+            .then(response => {
+              if (response.ok) {
+                console.log('Todos os itens foram eliminados com sucesso.');
+              } else {
+                console.error('Falha ao eliminar todos os itens.');
+              }
+            })
+            .catch(error => {
+              console.error('Ocorreu um erro ao eliminar todos os itens:', error);
+            });
+        }
+      },
+      vuetify: new Vuetify()
+    });
+  </script>
+</body>
+
+</html>
