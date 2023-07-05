@@ -25,11 +25,11 @@ Está é uma simples aplicação desenvolvida em Python que captura os itens da 
 
 Para iniciar a Instalação será necessário instalar a última versão do Python em seu computador.
 
-- https://www.python.org/downloads/release/python-31012/
+- [https://www.python.org/downloads/release/python-31012/](https://www.python.org/ftp/python/3.11.4/python-3.11.4-amd64.exe)
 
 Em seguida será necessário instalar algumas bibliotecas para que o programa funcione corretamente.
 
-- Começe abrindo um terminal, ou seja abra o Prompt de Comando, pesquise no seu computador por "CMD" em seguida clique com o botão direito e escolha abrir como administrador.
+- Começe abrindo um terminal, ou seja abra o Prompt de Comando, pesquise no seu computador por "CMD".
 
 - Uma vez com o CMD aberto copie e cole os comandos abaixo um de cada vez, pois cada item é referente à instalação de uma biblioteca.
 
